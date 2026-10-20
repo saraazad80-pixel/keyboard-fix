@@ -19,6 +19,8 @@ hs.fnutils.contains = function(t, v) for _, x in ipairs(t) do if x == v then ret
 hs.eventtap = { event = { types = { flagsChanged = 1, keyDown = 2 } } }
 tapFn = nil
 hs.eventtap.new = function(types, fn) tapFn = fn; return { start = function() end } end
+modsDown = 2   -- pretend Fn is still held for the first two polls
+hs.eventtap.checkKeyboardModifiers = function() if modsDown > 0 then modsDown = modsDown - 1; LOG[#LOG+1] = "waiting"; return { fn = true } end return {} end
 hs.eventtap.keyStroke = function(mods, key) LOG[#LOG+1] = "key " .. table.concat(mods, "+") .. "+" .. key end
 hs.eventtap.keyStrokes = function(s) LOG[#LOG+1] = "typed " .. s end
 hs.timer.doAfter = function(d, f) f() end
@@ -62,6 +64,7 @@ lua.lua_getglobal(L, to_luastring('R'));
 const out = to_jsstring(lua.lua_tostring(L, -1)).split('\n');
 assert.deepEqual(out, [
   'hotkey f8',
+  'waiting', 'waiting',
   'key cmd+8', 'clip=سلام', 'key cmd+9', 'clip=sghl', 'layout=Persian – Standard',
   '--',
   '--',

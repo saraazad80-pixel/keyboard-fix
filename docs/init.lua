@@ -167,6 +167,22 @@ local function fix()
   end)
 end
 
+-- Wait until every modifier key is released before sending keys. Fn is the usual culprit: with Fn+F8 the
+-- Cmd+Shift+Left we send would arrive as Fn+Cmd+Shift+Left, and Fn+Left is Home on a Mac.
+local function modifiersDown()
+  local m = hs.eventtap.checkKeyboardModifiers()
+  return m.cmd or m.alt or m.shift or m.ctrl or m.fn
+end
+
+local function run()
+  local waited = 0
+  while modifiersDown() and waited < 1500 do
+    hs.timer.usleep(20000)
+    waited = waited + 20
+  end
+  fix()
+end
+
 -- for testing from the console: testFix(3) runs the fix after 3 seconds, so you can switch apps and select text
 function testFix(seconds)
   hs.timer.doAfter(seconds or 3, fix)
@@ -175,7 +191,7 @@ fixKeyboard = fix
 
 -- ordinary hotkey
 if HOTKEY_KEY ~= nil and HOTKEY_KEY ~= "" then
-  hs.hotkey.bind(HOTKEY_MODS, HOTKEY_KEY, fix)
+  hs.hotkey.bind(HOTKEY_MODS, HOTKEY_KEY, run)
 end
 
 -- modifier-only trigger: all of TRIGGER_MODS pressed together, then released, with no other key in between
@@ -212,7 +228,7 @@ if #TRIGGER_MODS > 0 then
       end
       if not anyDown and not (flags.cmd or flags.alt or flags.ctrl) then
         armed = false
-        hs.timer.doAfter(0.1, fix)
+        hs.timer.doAfter(0.1, run)
       end
     end
     return false
