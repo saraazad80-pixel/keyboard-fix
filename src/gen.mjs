@@ -10,10 +10,10 @@ const ahkStr = s => {
   return '"' + s.replace(/`/g, '``').replace(/"/g, '`"') + '"';
 };
 const ahkMap = (name, m) => {
-  const keys = Object.keys(m); let lines = [];
-  for (let i = 0; i < keys.length; i += 6)
-    lines.push('  ' + keys.slice(i, i + 6).map(k => `${ahkStr(k)}, ${ahkStr(m[k])}`).join(', ') + (i + 6 < keys.length ? ',' : ''));
-  return `${name} := Map(\n${lines.join('\n')}\n)`;
+  const keys = Object.keys(m); let lines = [`${name} := Map()`];
+  for (let i = 0; i < keys.length; i += 4)
+    lines.push(keys.slice(i, i + 4).map(k => `${name}[${ahkStr(k)}] := ${ahkStr(m[k])}`).join(', '));
+  return lines.join('\n');
 };
 const ahk = `﻿; Fix Persian/English keyboard mistakes
 ; Select the wrong text (or leave the cursor at the end of the line) and press the key below.
@@ -41,7 +41,7 @@ for k, v in ToFa
 Convert(text) {
   global ToFa, ToEn
   fa := 0, en := 0
-  loop parse text {
+  Loop Parse, text {
     c := Ord(A_LoopField)
     if ((c >= 0x600 && c <= 0x6FF) || (c >= 0xFB50 && c <= 0xFEFF) || c = 0x200C || c = 0xAB || c = 0xBB || c = 0xD7)
       fa++
@@ -50,7 +50,7 @@ Convert(text) {
   }
   table := fa > en ? ToEn : ToFa
   out := ""
-  loop parse text
+  Loop Parse, text
     out .= table.Has(A_LoopField) ? table[A_LoopField] : A_LoopField
   return out
 }

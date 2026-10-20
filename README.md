@@ -37,7 +37,7 @@ The key map lives once, in `src/map.mjs`; `src/gen.mjs` generates both scripts f
 ```bash
 npm install          # fengari, a Lua VM used by the tests
 npm run build        # regenerates mac/init.lua and windows/fix-keyboard.ahk
-npm test             # checks the map and runs the generated Lua in a VM with simulated key events
+npm test             # checks the map, parses the generated AutoHotkey tables, and runs the generated Lua in a VM with simulated key events
 ```
 
 Edit `src/map.mjs`, not the generated files.

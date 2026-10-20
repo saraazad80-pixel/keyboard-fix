@@ -11,43 +11,55 @@ FixKey := "F8"          ; the key that fixes the text (examples: "F8", "^!f" = C
 Layout := "standard"    ; "standard" = Persian (Standard) / ISIRI 9147;  "windows" = the old Windows "Persian" layout (پ on backslash, ئ on M)
 ; ------------------------------
 
-MapStandard := Map(
-  "0", "۰", "1", "۱", "2", "۲", "3", "۳", "4", "۴", "5", "۵",
-  "6", "۶", "7", "۷", "8", "۸", "9", "۹", "-", "-", "=", "=",
-  "q", "ض", "w", "ص", "e", "ث", "r", "ق", "t", "ف", "y", "غ",
-  "u", "ع", "i", "ه", "o", "خ", "p", "ح", "[", "ج", "]", "چ",
-  "\", "\", "a", "ش", "s", "س", "d", "ی", "f", "ب", "g", "ل",
-  "h", "ا", "j", "ت", "k", "ن", "l", "م", ";", "ک", "'", "گ",
-  "z", "ظ", "x", "ط", "c", "ز", "v", "ر", "b", "ذ", "n", "د",
-  "m", "پ", ",", "و", ".", ".", "/", "/", "!", "!", "@", "٬",
-  "#", "٫", "$", "﷼", "%", "٪", "^", "×", "&", "،", "*", "*",
-  "(", ")", ")", "(", "_", "ـ", "+", "+", "Q", "ْ", "W", "ٌ",
-  "E", "ٍ", "R", "ً", "T", "ُ", "Y", "ِ", "U", "َ", "I", "ّ",
-  "O", "]", "P", "[", "{", "}", "}", "{", "|", "|", "A", "ؤ",
-  "S", "ئ", "D", "ي", "F", "إ", "G", "أ", "H", "آ", "J", "ة",
-  "K", "»", "L", "«", ":", ":", "`"", "؛", "Z", "ك", "X", "ٓ",
-  "C", "ژ", "V", "ٰ", "B", Chr(0x200C), "N", "ٔ", "M", "ء", "<", ">",
-  ">", "<", "?", "؟"
-)
+MapStandard := Map()
+MapStandard["0"] := "۰", MapStandard["1"] := "۱", MapStandard["2"] := "۲", MapStandard["3"] := "۳"
+MapStandard["4"] := "۴", MapStandard["5"] := "۵", MapStandard["6"] := "۶", MapStandard["7"] := "۷"
+MapStandard["8"] := "۸", MapStandard["9"] := "۹", MapStandard["-"] := "-", MapStandard["="] := "="
+MapStandard["q"] := "ض", MapStandard["w"] := "ص", MapStandard["e"] := "ث", MapStandard["r"] := "ق"
+MapStandard["t"] := "ف", MapStandard["y"] := "غ", MapStandard["u"] := "ع", MapStandard["i"] := "ه"
+MapStandard["o"] := "خ", MapStandard["p"] := "ح", MapStandard["["] := "ج", MapStandard["]"] := "چ"
+MapStandard["\"] := "\", MapStandard["a"] := "ش", MapStandard["s"] := "س", MapStandard["d"] := "ی"
+MapStandard["f"] := "ب", MapStandard["g"] := "ل", MapStandard["h"] := "ا", MapStandard["j"] := "ت"
+MapStandard["k"] := "ن", MapStandard["l"] := "م", MapStandard[";"] := "ک", MapStandard["'"] := "گ"
+MapStandard["z"] := "ظ", MapStandard["x"] := "ط", MapStandard["c"] := "ز", MapStandard["v"] := "ر"
+MapStandard["b"] := "ذ", MapStandard["n"] := "د", MapStandard["m"] := "پ", MapStandard[","] := "و"
+MapStandard["."] := ".", MapStandard["/"] := "/", MapStandard["!"] := "!", MapStandard["@"] := "٬"
+MapStandard["#"] := "٫", MapStandard["$"] := "﷼", MapStandard["%"] := "٪", MapStandard["^"] := "×"
+MapStandard["&"] := "،", MapStandard["*"] := "*", MapStandard["("] := ")", MapStandard[")"] := "("
+MapStandard["_"] := "ـ", MapStandard["+"] := "+", MapStandard["Q"] := "ْ", MapStandard["W"] := "ٌ"
+MapStandard["E"] := "ٍ", MapStandard["R"] := "ً", MapStandard["T"] := "ُ", MapStandard["Y"] := "ِ"
+MapStandard["U"] := "َ", MapStandard["I"] := "ّ", MapStandard["O"] := "]", MapStandard["P"] := "["
+MapStandard["{"] := "}", MapStandard["}"] := "{", MapStandard["|"] := "|", MapStandard["A"] := "ؤ"
+MapStandard["S"] := "ئ", MapStandard["D"] := "ي", MapStandard["F"] := "إ", MapStandard["G"] := "أ"
+MapStandard["H"] := "آ", MapStandard["J"] := "ة", MapStandard["K"] := "»", MapStandard["L"] := "«"
+MapStandard[":"] := ":", MapStandard["`""] := "؛", MapStandard["Z"] := "ك", MapStandard["X"] := "ٓ"
+MapStandard["C"] := "ژ", MapStandard["V"] := "ٰ", MapStandard["B"] := Chr(0x200C), MapStandard["N"] := "ٔ"
+MapStandard["M"] := "ء", MapStandard["<"] := ">", MapStandard[">"] := "<", MapStandard["?"] := "؟"
 
-MapWindows := Map(
-  "0", "۰", "1", "۱", "2", "۲", "3", "۳", "4", "۴", "5", "۵",
-  "6", "۶", "7", "۷", "8", "۸", "9", "۹", "-", "-", "=", "=",
-  "q", "ض", "w", "ص", "e", "ث", "r", "ق", "t", "ف", "y", "غ",
-  "u", "ع", "i", "ه", "o", "خ", "p", "ح", "[", "ج", "]", "چ",
-  "\", "پ", "a", "ش", "s", "س", "d", "ی", "f", "ب", "g", "ل",
-  "h", "ا", "j", "ت", "k", "ن", "l", "م", ";", "ک", "'", "گ",
-  "z", "ظ", "x", "ط", "c", "ز", "v", "ر", "b", "ذ", "n", "د",
-  "m", "ئ", ",", "و", ".", ".", "/", "/", "!", "!", "@", "@",
-  "#", "#", "$", "$", "%", "٪", "^", "^", "&", "&", "*", "*",
-  "(", ")", ")", "(", "_", "_", "+", "+", "Q", "ً", "W", "ٌ",
-  "E", "ٍ", "R", "﷼", "T", "،", "Y", "؛", "U", ",", "I", "]",
-  "O", "[", "P", "\", "{", "}", "}", "{", "|", "|", "A", "َ",
-  "S", "ُ", "D", "ِ", "F", "ّ", "G", "ۀ", "H", "آ", "J", "ـ",
-  "K", "«", "L", "»", ":", ":", "`"", "`"", "Z", "ك", "X", "ي",
-  "C", "ژ", "V", "ؤ", "B", "إ", "N", "أ", "M", "ء", "<", ">",
-  ">", "<", "?", "؟"
-)
+MapWindows := Map()
+MapWindows["0"] := "۰", MapWindows["1"] := "۱", MapWindows["2"] := "۲", MapWindows["3"] := "۳"
+MapWindows["4"] := "۴", MapWindows["5"] := "۵", MapWindows["6"] := "۶", MapWindows["7"] := "۷"
+MapWindows["8"] := "۸", MapWindows["9"] := "۹", MapWindows["-"] := "-", MapWindows["="] := "="
+MapWindows["q"] := "ض", MapWindows["w"] := "ص", MapWindows["e"] := "ث", MapWindows["r"] := "ق"
+MapWindows["t"] := "ف", MapWindows["y"] := "غ", MapWindows["u"] := "ع", MapWindows["i"] := "ه"
+MapWindows["o"] := "خ", MapWindows["p"] := "ح", MapWindows["["] := "ج", MapWindows["]"] := "چ"
+MapWindows["\"] := "پ", MapWindows["a"] := "ش", MapWindows["s"] := "س", MapWindows["d"] := "ی"
+MapWindows["f"] := "ب", MapWindows["g"] := "ل", MapWindows["h"] := "ا", MapWindows["j"] := "ت"
+MapWindows["k"] := "ن", MapWindows["l"] := "م", MapWindows[";"] := "ک", MapWindows["'"] := "گ"
+MapWindows["z"] := "ظ", MapWindows["x"] := "ط", MapWindows["c"] := "ز", MapWindows["v"] := "ر"
+MapWindows["b"] := "ذ", MapWindows["n"] := "د", MapWindows["m"] := "ئ", MapWindows[","] := "و"
+MapWindows["."] := ".", MapWindows["/"] := "/", MapWindows["!"] := "!", MapWindows["@"] := "@"
+MapWindows["#"] := "#", MapWindows["$"] := "$", MapWindows["%"] := "٪", MapWindows["^"] := "^"
+MapWindows["&"] := "&", MapWindows["*"] := "*", MapWindows["("] := ")", MapWindows[")"] := "("
+MapWindows["_"] := "_", MapWindows["+"] := "+", MapWindows["Q"] := "ً", MapWindows["W"] := "ٌ"
+MapWindows["E"] := "ٍ", MapWindows["R"] := "﷼", MapWindows["T"] := "،", MapWindows["Y"] := "؛"
+MapWindows["U"] := ",", MapWindows["I"] := "]", MapWindows["O"] := "[", MapWindows["P"] := "\"
+MapWindows["{"] := "}", MapWindows["}"] := "{", MapWindows["|"] := "|", MapWindows["A"] := "َ"
+MapWindows["S"] := "ُ", MapWindows["D"] := "ِ", MapWindows["F"] := "ّ", MapWindows["G"] := "ۀ"
+MapWindows["H"] := "آ", MapWindows["J"] := "ـ", MapWindows["K"] := "«", MapWindows["L"] := "»"
+MapWindows[":"] := ":", MapWindows["`""] := "`"", MapWindows["Z"] := "ك", MapWindows["X"] := "ي"
+MapWindows["C"] := "ژ", MapWindows["V"] := "ؤ", MapWindows["B"] := "إ", MapWindows["N"] := "أ"
+MapWindows["M"] := "ء", MapWindows["<"] := ">", MapWindows[">"] := "<", MapWindows["?"] := "؟"
 
 ToFa := Layout = "windows" ? MapWindows : MapStandard
 ToEn := Map()
@@ -58,7 +70,7 @@ for k, v in ToFa
 Convert(text) {
   global ToFa, ToEn
   fa := 0, en := 0
-  loop parse text {
+  Loop Parse, text {
     c := Ord(A_LoopField)
     if ((c >= 0x600 && c <= 0x6FF) || (c >= 0xFB50 && c <= 0xFEFF) || c = 0x200C || c = 0xAB || c = 0xBB || c = 0xD7)
       fa++
@@ -67,7 +79,7 @@ Convert(text) {
   }
   table := fa > en ? ToEn : ToFa
   out := ""
-  loop parse text
+  Loop Parse, text
     out .= table.Has(A_LoopField) ? table[A_LoopField] : A_LoopField
   return out
 }

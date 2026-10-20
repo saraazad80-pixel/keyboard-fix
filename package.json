@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "build": "node src/gen.mjs",
-    "test": "node test/map.test.mjs && node test/lua.test.mjs"
+    "test": "node test/map.test.mjs && node test/ahk.test.mjs && node test/lua.test.mjs"
   },
   "devDependencies": {
     "fengari": "^0.1.4"
