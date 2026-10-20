@@ -278,4 +278,26 @@ if #TRIGGER_MODS > 0 then
 end
 `;
 fs.writeFileSync(path.join(ROOT, 'mac', 'init.lua'), lua);
-console.log('wrote mac/init.lua and windows/fix-keyboard.ahk');
+// ---------- web page (docs/, served by GitHub Pages) ----------
+const mapJs = `// Generated from src/map.mjs by src/gen.mjs. Do not edit.
+window.KEYBOARD_FIX = (function () {
+  var standard = ${JSON.stringify(standard)};
+  var windows = ${JSON.stringify(windows)};
+  function invert(m) { var r = {}; for (var k in m) if (m[k] !== k && !(m[k] in r)) r[m[k]] = k; return r; }
+  function convert(text, m) {
+    var toEn = invert(m), fa = 0, en = 0, out = '', i, ch;
+    for (i = 0; i < text.length; i++) {
+      ch = text[i];
+      if (/[\\u0600-\\u06FF\\uFB50-\\uFEFF\\u200C\\u00AB\\u00BB\\u00D7]/.test(ch)) fa++; else if (/[A-Za-z]/.test(ch)) en++;
+    }
+    var table = fa > en ? toEn : m;
+    for (i = 0; i < text.length; i++) { ch = text[i]; out += (ch in table) ? table[ch] : ch; }
+    return out;
+  }
+  return { standard: standard, windows: windows, convert: convert };
+})();
+`;
+fs.writeFileSync(path.join(ROOT, 'docs', 'map.js'), mapJs);
+fs.copyFileSync(path.join(ROOT, 'mac', 'init.lua'), path.join(ROOT, 'docs', 'init.lua'));
+fs.copyFileSync(path.join(ROOT, 'windows', 'fix-keyboard.ahk'), path.join(ROOT, 'docs', 'fix-keyboard.ahk'));
+console.log('wrote mac/init.lua, windows/fix-keyboard.ahk, docs/{map.js,init.lua,fix-keyboard.ahk}');

@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>اصلاح کیبورد اشتباه</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%276%27 fill=%27%231f5f8b%27/%3E%3Ctext x=%2716%27 y=%2722%27 font-size=%2718%27 text-anchor=%27middle%27 fill=%27white%27 font-family=%27sans-serif%27%3E⌨%3C/text%3E%3C/svg%3E">
+<meta name="description" content="یک کلید بزنید تا متنی که با کیبورد اشتباه نوشته‌اید بین فارسی و انگلیسی برگردد. مک و ویندوز.">
+<style>
+  :root {
+    --bg: #fbfaf7; --fg: #1d1d1b; --muted: #6b6a66; --line: #e2dfd8; --card: #ffffff;
+    --accent: #1f5f8b; --accent-fg: #ffffff; --soft: #eef3f7; --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) { --bg: #171716; --fg: #ecebe6; --muted: #a09e97; --line: #33322f; --card: #1f1f1d; --accent: #7fb3d9; --accent-fg: #10233a; --soft: #22282d; }
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 17px/1.7 system-ui, -apple-system, "Segoe UI", Tahoma, sans-serif; }
+  [dir="rtl"] body { font-family: Vazirmatn, "Segoe UI", Tahoma, system-ui, sans-serif; }
+  main { max-width: 760px; margin: 0 auto; padding: 24px 16px 64px; }
+  header { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 32px; }
+  .lang { border: 1px solid var(--line); background: var(--card); color: var(--fg); border-radius: 8px; padding: 6px 12px; font: inherit; font-size: 15px; cursor: pointer; }
+  h1 { font-size: 30px; line-height: 1.3; margin: 0 0 8px; }
+  .lead { font-size: 19px; color: var(--muted); margin: 0 0 28px; }
+  code, kbd, .mono { font-family: var(--mono); font-size: 0.92em; }
+  code { background: var(--soft); padding: 1px 6px; border-radius: 4px; direction: ltr; unicode-bidi: isolate; }
+  kbd { border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 6px; padding: 1px 7px; background: var(--card); white-space: nowrap; }
+  section { margin: 36px 0; }
+  h2 { font-size: 21px; margin: 0 0 12px; }
+  .demo textarea, .demo .out { width: 100%; border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; font: inherit; background: var(--card); color: var(--fg); min-height: 92px; resize: vertical; }
+  .demo .out { white-space: pre-wrap; word-break: break-word; }
+  .demo .row { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin: 10px 0 6px; color: var(--muted); font-size: 15px; }
+  .btn { display: inline-block; border: 0; border-radius: 8px; padding: 9px 16px; font: inherit; font-size: 16px; cursor: pointer; text-decoration: none; background: var(--accent); color: var(--accent-fg); }
+  .btn.quiet { background: var(--soft); color: var(--fg); }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+  .card { border: 1px solid var(--line); border-radius: 12px; background: var(--card); padding: 20px; }
+  .card h3 { margin: 0 0 4px; font-size: 19px; }
+  .card .file { color: var(--muted); font-size: 14px; margin-bottom: 14px; }
+  .card ol { margin: 14px 0 0; padding-inline-start: 22px; }
+  .card li { margin: 6px 0; }
+  .note { color: var(--muted); font-size: 15px; }
+  footer { margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: 15px; }
+  a { color: var(--accent); }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="mono" style="color:var(--muted)">keyboard-fix</div>
+    <button class="lang" id="lang" type="button" data-action="lang">English</button>
+  </header>
+
+  <!-- ================= Persian ================= -->
+  <div id="fa">
+    <h1>کیبورد اشتباه؟ یک کلید بزنید.</h1>
+    <p class="lead">متنی که با چیدمان اشتباه نوشته‌اید، در جا به زبان درست برمی‌گردد: <code>sghl</code> می‌شود «سلام» و <code>صاشف</code> می‌شود «what». روی مک و ویندوز، در هر برنامه‌ای.</p>
+
+    <section class="demo">
+      <h2>همین‌جا امتحان کنید</h2>
+      <textarea id="in-fa" data-demo="fa" dir="auto" placeholder="مثلاً بنویسید: sghl ]x,vd?" spellcheck="false"></textarea>
+      <div class="row"><span>نتیجه</span><button class="btn quiet" type="button" data-action="copy" data-target="out-fa">کپی</button></div>
+      <div class="out" id="out-fa"></div>
+      <p class="note">جهت تبدیل خودکار از روی حروف تشخیص داده می‌شود. اگر پ یا ئ اشتباه شد، چیدمان قدیمی ویندوز را انتخاب کنید:
+        <label><input type="radio" name="layout-fa" value="standard" checked data-layout> استاندارد</label>
+        <label><input type="radio" name="layout-fa" value="windows" data-layout> ویندوز قدیمی</label>
+      </p>
+    </section>
+
+    <section>
+      <h2>نصب، سه قدم</h2>
+      <div class="cards">
+        <div class="card">
+          <h3>مک</h3>
+          <div class="file">Hammerspoon · فایل <code>init.lua</code></div>
+          <a class="btn" href="init.lua" download="init.lua">دانلود برای مک</a>
+          <ol>
+            <li><a href="https://www.hammerspoon.org" rel="noopener">Hammerspoon</a> را نصب کنید و در System Settings → Privacy &amp; Security → Accessibility به آن اجازه بدهید.</li>
+            <li>فایل را در پوشهٔ <code>~/.hammerspoon</code> بگذارید (در Finder: <kbd>⇧⌘G</kbd> و تایپ مسیر).</li>
+            <li>از آیکون چکش در نوار بالا <b>Reload Config</b> را بزنید. کلید: <kbd>Fn</kbd>+<kbd>F8</kbd>.</li>
+          </ol>
+        </div>
+        <div class="card">
+          <h3>ویندوز</h3>
+          <div class="file">AutoHotkey v2 · فایل <code>fix-keyboard.ahk</code></div>
+          <a class="btn" href="fix-keyboard.ahk" download="fix-keyboard.ahk">دانلود برای ویندوز</a>
+          <ol>
+            <li><a href="https://www.autohotkey.com" rel="noopener">AutoHotkey</a> نسخهٔ ۲ را نصب کنید.</li>
+            <li>روی فایل دوبار کلیک کنید. کلید: <kbd>F8</kbd>.</li>
+            <li>برای اجرای خودکار، میان‌بر فایل را در پوشهٔ <code>shell:startup</code> بگذارید.</li>
+          </ol>
+        </div>
+      </div>
+      <p class="note">متن را انتخاب کنید و کلید را بزنید؛ اگر چیزی انتخاب نباشد، از اول خط تا مکان‌نما تبدیل می‌شود. کلیپ‌بورد بعدش به حالت قبل برمی‌گردد. کلید و چیدمان در چند خط اول هر فایل قابل تغییر است.</p>
+    </section>
+
+    <footer>کد باز است: <a href="https://github.com/saraazad80-pixel/keyboard-fix">github.com/saraazad80-pixel/keyboard-fix</a> · مجوز MIT · ساختهٔ سارا آزاد</footer>
+  </div>
+
+  <!-- ================= English ================= -->
+  <div id="en" dir="ltr" hidden>
+    <h1>Wrong keyboard? Press one key.</h1>
+    <p class="lead">Text typed with the wrong layout is converted in place: <code>sghl</code> becomes «سلام», <code>صاشف</code> becomes "what". macOS and Windows, in any app.</p>
+
+    <section class="demo">
+      <h2>Try it here</h2>
+      <textarea id="in-en" data-demo="en" dir="auto" placeholder="Type, for example: sghl ]x,vd?" spellcheck="false"></textarea>
+      <div class="row"><span>Result</span><button class="btn quiet" type="button" data-action="copy" data-target="out-en">Copy</button></div>
+      <div class="out" id="out-en"></div>
+      <p class="note">The direction is detected from the letters. If پ or ئ come out wrong, pick the old Windows layout:
+        <label><input type="radio" name="layout-en" value="standard" checked data-layout> Standard</label>
+        <label><input type="radio" name="layout-en" value="windows" data-layout> Old Windows</label>
+      </p>
+    </section>
+
+    <section>
+      <h2>Install in three steps</h2>
+      <div class="cards">
+        <div class="card">
+          <h3>macOS</h3>
+          <div class="file">Hammerspoon · <code>init.lua</code></div>
+          <a class="btn" href="init.lua" download="init.lua">Download for macOS</a>
+          <ol>
+            <li>Install <a href="https://www.hammerspoon.org" rel="noopener">Hammerspoon</a> and allow it under System Settings → Privacy &amp; Security → Accessibility.</li>
+            <li>Put the file in <code>~/.hammerspoon</code> (in Finder: <kbd>⇧⌘G</kbd>, then type the path).</li>
+            <li>Hammer icon in the menu bar → <b>Reload Config</b>. Key: <kbd>Fn</kbd>+<kbd>F8</kbd>.</li>
+          </ol>
+        </div>
+        <div class="card">
+          <h3>Windows</h3>
+          <div class="file">AutoHotkey v2 · <code>fix-keyboard.ahk</code></div>
+          <a class="btn" href="fix-keyboard.ahk" download="fix-keyboard.ahk">Download for Windows</a>
+          <ol>
+            <li>Install <a href="https://www.autohotkey.com" rel="noopener">AutoHotkey</a> v2.</li>
+            <li>Double-click the file. Key: <kbd>F8</kbd>.</li>
+            <li>To run at login, put a shortcut to it in <code>shell:startup</code>.</li>
+          </ol>
+        </div>
+      </div>
+      <p class="note">Select text and press the key; with nothing selected, the line up to the cursor is converted. The clipboard is restored afterwards. The key and layout are settings in the first lines of each file.</p>
+    </section>
+
+    <footer>Open source: <a href="https://github.com/saraazad80-pixel/keyboard-fix">github.com/saraazad80-pixel/keyboard-fix</a> · MIT licence · by Sara Azad</footer>
+  </div>
+</main>
+
+<script src="map.js"></script>
+<script>
+(function () {
+  var K = window.KEYBOARD_FIX, $ = function (id) { return document.getElementById(id); };
+  var layout = 'standard';
+
+  function setLang(lang) {
+    var fa = lang === 'fa';
+    $('fa').hidden = !fa; $('en').hidden = fa;
+    document.documentElement.lang = lang;
+    document.documentElement.dir = fa ? 'rtl' : 'ltr';
+    document.title = fa ? 'اصلاح کیبورد اشتباه' : 'Fix the wrong keyboard';
+    $('lang').textContent = fa ? 'English' : 'فارسی';
+    try { localStorage.setItem('keyboard-fix-lang', lang); } catch (e) {}
+  }
+  function update(id) {
+    var inp = $('in-' + id), out = $('out-' + id), v = inp.value;
+    out.textContent = v ? K.convert(v, K[layout]) : '';
+    out.dir = /[؀-ۿ]/.test(out.textContent) ? 'rtl' : 'ltr';
+  }
+  document.addEventListener('input', function (e) {
+    var t = e.target;
+    if (t.hasAttribute('data-demo')) update(t.getAttribute('data-demo'));
+  });
+  document.addEventListener('change', function (e) {
+    var t = e.target;
+    if (t.hasAttribute('data-layout')) {
+      layout = t.value;
+      var all = document.querySelectorAll('[data-layout][value="' + layout + '"]');
+      for (var i = 0; i < all.length; i++) all[i].checked = true;
+      update('fa'); update('en');
+    }
+  });
+  document.addEventListener('click', function (e) {
+    var t = e.target.closest('[data-action]');
+    if (!t) return;
+    var a = t.getAttribute('data-action');
+    if (a === 'lang') setLang(document.documentElement.lang === 'fa' ? 'en' : 'fa');
+    if (a === 'copy') {
+      var text = $(t.getAttribute('data-target')).textContent;
+      if (!text) return;
+      var done = function () { var old = t.textContent; t.textContent = '✓'; setTimeout(function () { t.textContent = old; }, 900); };
+      if (navigator.clipboard) navigator.clipboard.writeText(text).then(done, done); else done();
+    }
+  });
+
+  var saved = null;
+  try { saved = localStorage.getItem('keyboard-fix-lang'); } catch (e) {}
+  if (saved === 'en' || saved === 'fa') setLang(saved);
+  else if (!/^fa/i.test(navigator.language || '')) setLang('en');
+})();
+</script>
+</body>
+</html>
