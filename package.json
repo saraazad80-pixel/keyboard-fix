@@ -1,0 +1,15 @@
+{
+  "name": "keyboard-fix",
+  "version": "1.0.0",
+  "description": "Press one key to convert text typed with the wrong keyboard layout between Persian and English (macOS and Windows).",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "node src/gen.mjs",
+    "test": "node test/map.test.mjs && node test/lua.test.mjs"
+  },
+  "devDependencies": {
+    "fengari": "^0.1.4"
+  },
+  "license": "MIT"
+}
