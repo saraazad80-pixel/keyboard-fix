@@ -21,7 +21,8 @@ tapFn = nil
 hs.eventtap.new = function(types, fn) tapFn = fn; return { start = function() end } end
 modsDown = 2   -- pretend Fn is still held for the first two polls
 hs.eventtap.checkKeyboardModifiers = function() if modsDown > 0 then modsDown = modsDown - 1; LOG[#LOG+1] = "waiting"; return { fn = true } end return {} end
-hs.eventtap.keyStroke = function(mods, key) LOG[#LOG+1] = "key " .. table.concat(mods, "+") .. "+" .. key end
+onKey = nil   -- a scenario can react to a key, e.g. make a selection appear
+hs.eventtap.keyStroke = function(mods, key) local k = table.concat(mods, "+") .. "+" .. key; LOG[#LOG+1] = "key " .. k; if onKey then onKey(k) end end
 hs.eventtap.keyStrokes = function(s) LOG[#LOG+1] = "typed " .. s end
 hs.timer.doAfter = function(d, f) f() end
 hs.timer.usleep = function() end
@@ -33,10 +34,10 @@ hs.keycodes.layouts = function() return { "U.S.", "Persian – Standard" } end
 hs.keycodes.setLayout = function(n) LOG[#LOG+1] = "layout=" .. n end
 hs.keycodes.currentLayout = function() return "U.S." end
 hs.alert.show = function(m) LOG[#LOG+1] = "alert " .. m end
-hs.application.frontmostApplication = function() return { name = function() return "Test" end } end
+hs.application.frontmostApplication = function() return { name = function() return "Test" end, pid = function() return 1 end } end
 hs.inspect = function(t) return "" end
 axText = nil
-hs.axuielement = { systemWideElement = function() return { attributeValue = function() return { attributeValue = function() return axText end } end } end }
+hs.axuielement = { applicationElement = function() return { setAttributeValue = function(_, k, v) LOG[#LOG+1] = "ax " .. k end } end, systemWideElement = function() return { attributeValue = function() return { attributeValue = function() return axText end } end } end }
 `;
 const scenario = `
 local function ev(t, flags) return { getType = function() return t end, getFlags = function() return flags end } end
@@ -55,6 +56,9 @@ tapFn(ev(1, { fn = true, shift = true, cmd = true })); tapFn(ev(1, {}))
 LOG[#LOG+1] = "--"
 -- 5. accessibility path: Cmd+C gives nothing, AX gives Persian text -> typed back as Latin
 clip = ""; axText = "صاشف"; hotkeyFn()
+LOG[#LOG+1] = "--"
+-- 6. nothing selected, right-to-left line: Cmd+Shift+Left selects nothing, Cmd+Shift+Right selects the line
+axText = nil; onKey = function(k) if k == "cmd+shift+124" then axText = "سلام" end end; hotkeyFn(); onKey = nil
 R = table.concat(LOG, "\\n")`;
 
 const L = lauxlib.luaL_newstate(); lualib.luaL_openlibs(L);
@@ -65,6 +69,7 @@ const out = to_jsstring(lua.lua_tostring(L, -1)).split('\n');
 assert.deepEqual(out, [
   'hotkey f8',
   'waiting', 'waiting',
+  'ax AXManualAccessibility',   // asked once per app, on the first use
   'key cmd+8', 'clip=سلام', 'key cmd+9', 'clip=sghl', 'layout=Persian – Standard',
   '--',
   '--',
@@ -72,5 +77,7 @@ assert.deepEqual(out, [
   '--',
   '--',
   'typed what', 'clip=', 'layout=U.S.',
+  '--',
+  'key cmd+8', 'key cmd+shift+123', 'key cmd+8', 'key cmd+shift+124', 'typed sghl', 'clip=', 'layout=U.S.',
 ]);
 console.log('lua: ok');
