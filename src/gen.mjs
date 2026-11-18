@@ -135,7 +135,7 @@ end
 
 local KEY_DELAY = 30000   -- microseconds between key events; Electron apps (Claude, VS Code, Slack) need this
 
-local KEYCODE = { c = 8, v = 9, left = 123 }   -- physical keys, independent of the active keyboard layout
+local KEYCODE = { c = 8, v = 9, left = 123, right = 124 }   -- physical keys, independent of the active keyboard layout
 local DEBUG = false
 
 local function log(...)
@@ -192,8 +192,25 @@ local function grab()
   return nil
 end
 
+-- Electron/Chromium apps (Claude, VS Code, Slack) expose no text through Accessibility until a client asks
+-- for it by setting AXManualAccessibility on the application; without this AXSelectedText is always empty there.
+local axEnabled = {}
+local function enableAX(app)
+  if not app then return end
+  local pid = app:pid()
+  if axEnabled[pid] then return end
+  local ok = pcall(function()
+    hs.axuielement.applicationElement(app):setAttributeValue("AXManualAccessibility", true)
+  end)
+  if ok then
+    axEnabled[pid] = true
+    hs.timer.usleep(300000)   -- give the app a moment to build its accessibility tree the first time
+  end
+end
+
 local function fix()
   local app = hs.application.frontmostApplication()
+  enableAX(app)
   log("fix in", app and app:name() or "?", "| layout:", hs.keycodes.currentLayout())
   local saved = hs.pasteboard.getContents()
   local text, via = grab()
@@ -204,6 +221,13 @@ local function fix()
     hs.timer.usleep(100000)
     text, via = grab()
     log("line:", text and #text or "nil", via)
+    if not text then
+      -- right-to-left text: the start of the line is on the right, so Cmd+Shift+Left selected nothing
+      press({ "cmd", "shift" }, "right")
+      hs.timer.usleep(100000)
+      text, via = grab()
+      log("line (rtl):", text and #text or "nil", via)
+    end
   end
   if not text then
     if saved then hs.pasteboard.setContents(saved) end
